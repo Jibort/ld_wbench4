@@ -33,7 +33,9 @@ abstract class LdStreamEnvelope {
   LdStreamEnvelope({
     DateTime? pTimeStamp,
     required String pTag,
-  }) : _tag = pTag;
+  }) : 
+    _tag = pTag, 
+    _timestamp = pTimeStamp?? DateTime.now();
 
   LdStreamEnvelope.fromMap({ required EntityMap pMap })
   : _timestamp = ToolsDT.parse(pMap[mfTimeStamp]),
