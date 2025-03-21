@@ -1,9 +1,7 @@
 // Classe abstracta base per a la comunicació d'entitats de dades a través de LdStream.
 // CreatedAt: 2025/03/18 dt. JIQ
 
-// ignore_for_file: unnecessary_getters_setters
-
-import 'package:ld_wbench4/07_models/ld_stream_entity.dart';
+import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
 
 // 🧩 Tipus de serialització i nom de camps.
@@ -14,11 +12,12 @@ const String mapData = "mapData";
 
 // Estats on es pot trobar l'entitat.
 enum LdEntityState {
-  preparing,    // Determina que l'entitat està sent preparada per a començar la càrrega.
-  loading,      // Determina que l'entitat està en estat de càrrega.
-  loaded,       // Determina que l'entitat ha estat carregada.
-  error,        // Determina que l'entitat no s'ha carregat degut a algun error.
-  reloading;    // Determina que l'entitat està en estat de tornar a carregar-se.
+  preparing,     // Determina que l'entitat està sent preparada per a començar la càrrega.
+  loading,       // Determina que l'entitat està en estat de càrrega.
+  loaded,        // Determina que l'entitat ha estat carregada.
+  error,         // Determina que l'entitat no s'ha carregat degut a algun error.
+  reloading,     // Determina que l'entitat està en estat de tornar a carregar-se.
+  updatingTheme; // Determina que s'està actualitzant el tema.
 
   // Converteix l'enum a String per serialitzar
   String toValue() => name;
@@ -51,10 +50,9 @@ enum LdEntityState {
 }
 
 abstract class LdStateStreamEntity 
-extends LdStreamEntity {
+extends LdStreamEnvelope {
   // 🧩 MEMBRES ------------------------
   late LdEntityState _state;
-
 
   // 📥 GETTERS/SETTERS ----------------
   LdEntityState get state => _state;
@@ -67,8 +65,8 @@ extends LdStreamEntity {
     required LdEntityState pState,
   }): _state = pState;
 
-  LdStateStreamEntity.fromMap(EntityMap pMap)
-  : super.fromMap(pMap) {
+  LdStateStreamEntity.fromMap({ required EntityMap pMap })
+  : super.fromMap(pMap: pMap) {
     _state = pMap[mapState];
   }
 

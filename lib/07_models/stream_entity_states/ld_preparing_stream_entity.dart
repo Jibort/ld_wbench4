@@ -1,27 +1,29 @@
 // Entitat tipus 'error' per a informar a través d'Streams.
 // CreatedAt: 2025/03/18 dt. JIQ
 
-// ignore_for_file: use_super_parameters, unnecessary_overrides
+// ignore_for_file: use_super_parameters
 
-import 'package:ld_wbench4/07_models/ld_stream_entity.dart';
-import 'package:ld_wbench4/07_models/stream_entity_states/ld_state_string_entity.dart';
+import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
 class   LdPreparingStreamEntity 
 extends LdStateStreamEntity {
   // 🧩 MEMBRES ------------------------
+  final bool _isVirgin;
   
   // 📥 GETTERS/SETTERS ----------------
   
   // 🛠️ CONSTRUCTORS ------------------
-  LdPreparingStreamEntity({ required super.pTag })
-  : super(pState: LdEntityState.preparing);
+  LdPreparingStreamEntity({ required super.pTag, bool pIsVirgin = true })
+  : _isVirgin = pIsVirgin, 
+    super(pState: LdEntityState.preparing);
+  
+  // 🛠️ MÈTODES -----------------------
+  bool get isFirstLoad => _isVirgin;
 
-  LdPreparingStreamEntity.fromMap(EntityMap pMap)
-  : super.fromMap(pMap);
+  LdPreparingStreamEntity.fromMap({ required EntityMap pMap, bool pIsVirgin = true })
+  : _isVirgin  = pIsVirgin,
+    super.fromMap(pMap: pMap);
 
   // 🌥️ 'LdStateStreamEntity' ---------
-  @override
-  EntityMap toMap() {
-    return super.toMap();
-  }
+  // Innecessari.
 }

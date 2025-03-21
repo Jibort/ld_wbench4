@@ -1,34 +1,28 @@
-// Entitat tipus 'loaded' per a informar a través d'Streams.
+// Entitat tipus 'themeUpdate' per a informar a través d'Streams.
 // CreatedAt: 2025/03/18 dt. JIQ
 
 // ignore_for_file: use_super_parameters
 
 import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
-class   LdLoadedStreamEntity<T>
+class LdThemeStreamEntity<T>
 extends LdStateStreamEntity {
   // 🧩 MEMBRES ------------------------
   final T _data;
-  final bool _firstTime;
   
   // 📥 GETTERS/SETTERS ----------------
-  T    get data      => _data;
-  bool get firstTime => _firstTime;
-
+  T get data => _data;
+  
   // 🛠️ CONSTRUCTORS ------------------
-  LdLoadedStreamEntity({
+  LdThemeStreamEntity({
     super.pTimeStamp,
     required super.pTag, 
-    required T pData,
-    required bool pFirstTime, 
- })
+    required T pData, })
   : _data = pData,
-    _firstTime = pFirstTime,
-    super(pState: LdEntityState.loaded);
+    super(pState: LdEntityState.updatingTheme);
   
-    LdLoadedStreamEntity.fromMap(EntityMap pMap)
+    LdThemeStreamEntity.fromMap(EntityMap pMap)
     : _data = pMap[mfData],
-      _firstTime = pMap[mfFirstTime],
       super.fromMap(pMap: pMap);
 
     // 🌥️ 'LdStreamEntity' --------------

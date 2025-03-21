@@ -1,10 +1,9 @@
 // Entitat tipus 'reloading' per a informar a través d'Streams.
 // CreatedAt: 2025/03/18 dt. JIQ
 
-// ignore_for_file: use_super_parameters, unnecessary_overrides
+// ignore_for_file: use_super_parameters
 
-import 'package:ld_wbench4/07_models/ld_stream_entity.dart';
-import 'package:ld_wbench4/07_models/stream_entity_states/ld_state_string_entity.dart';
+import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
 class LdReLoadingStreamEntity
 extends LdStateStreamEntity {
@@ -19,11 +18,8 @@ extends LdStateStreamEntity {
   }) : super(pState: LdEntityState.reloading);
 
   LdReLoadingStreamEntity.fromMap(EntityMap pMap)
-  : super.fromMap(pMap);
+  : super.fromMap(pMap: pMap);
 
   // 🌥️ 'LdStreamEntity' --------------
-  @override
-  EntityMap toMap() {
-    return super.toMap();
-  }
+  // Innecessari.
 }

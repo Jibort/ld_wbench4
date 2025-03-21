@@ -3,8 +3,7 @@
 
 // ignore_for_file: use_super_parameters
 
-import 'package:ld_wbench4/07_models/ld_stream_entity.dart';
-import 'package:ld_wbench4/07_models/stream_entity_states/ld_state_string_entity.dart';
+import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
 class LdErrorStreamEntity 
 extends LdStateStreamEntity {
@@ -29,7 +28,7 @@ extends LdStateStreamEntity {
   LdErrorStreamEntity.fromMap(EntityMap pMap)
     : _error = pMap[mapError],
       _exception = pMap[mapException],
-      super.fromMap(pMap);
+      super.fromMap(pMap: pMap);
 
   // 🌥️ 'LdStreamEntity' --------------
   @override
