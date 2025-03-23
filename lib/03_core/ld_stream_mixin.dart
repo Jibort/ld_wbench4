@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:ld_wbench4/05_tools/debug.dart';
+import 'package:ld_wbench4/07_models/ld_model.dart';
 import 'package:ld_wbench4/07_models/ld_model_stream_entity.dart';
 import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
@@ -50,9 +51,9 @@ mixin LdStreamMixin<
   
   // 🌥️ ESTATS -----------------------
   /// Emet que una estructura de dades.
-  void emitData<T>({ required String pTag, required T pData }) {
+  void emitData<T extends LdModel>({ required String pTag, required T pData }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdStreamEntity<T>(pTag: pTag, pData: pData) as E);
+    _streamCtrl.add(LdModelStreamEntity<T>(pTag: pTag, pData: pData) as E);
   }
 
   /// Emet que s'està preparant la càrrega de dades

@@ -7,6 +7,7 @@ import 'package:ld_wbench4/03_core/ld_tag_mixin.dart';
 import 'package:ld_wbench4/03_core/ld_state.dart';
 import 'package:ld_wbench4/03_core/ld_view.dart';
 import 'package:ld_wbench4/03_core/ld_widget.dart';
+import 'package:ld_wbench4/05_tools/ld_map.dart';
 
 class LdBinding<T extends LdTagMixin> {
   // 📝 ESTÀTICS -----------------------
@@ -24,8 +25,7 @@ static int _ctrls = 0;
   static LdBinding get single => _single;
 
   // 🧩 MEMBRES ------------------------
-  final Map<String, T> _map = {};
-
+  final LdMap<T> _map = LdMap<T>({});
 
   // 🛠️ CONSTRUCTORS ------------------
   LdBinding._();

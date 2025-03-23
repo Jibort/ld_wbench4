@@ -1,6 +1,7 @@
 // Classe abstracta base per a la comunicació d'entitats de dades a través de LdStream.
 // CreatedAt: 2025/03/18 dt. JIQ
 
+import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
 
@@ -65,15 +66,15 @@ extends LdStreamEnvelope {
     required LdEntityState pState,
   }): _state = pState;
 
-  LdStateStreamEntity.fromMap({ required EntityMap pMap })
+  LdStateStreamEntity.fromMap({ required LdMap pMap })
   : super.fromMap(pMap: pMap) {
     _state = pMap[mapState];
   }
 
   // 🌥️ FUNCIONS ABSTRACTES -----------
   @override
-  EntityMap toMap() {
-    EntityMap map = super.toMap();
+  LdMap toMap() {
+    LdMap map = super.toMap();
     map[mapState] = _state;
     return map;
   }

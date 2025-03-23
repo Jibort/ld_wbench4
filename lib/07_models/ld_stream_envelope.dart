@@ -4,6 +4,7 @@
 // Estats on es pot trobar l'entitat.
 import 'package:flutter/foundation.dart';
 import 'package:ld_wbench4/05_tools/date_times.dart';
+import 'package:ld_wbench4/05_tools/ld_map.dart';
 
 export 'stream_entity_states/ld_state_stream_entity.dart';
 export 'stream_entity_states/ld_error_stream_entity.dart';
@@ -13,8 +14,7 @@ export 'stream_entity_states/ld_preparing_stream_entity.dart';
 export 'stream_entity_states/ld_reloading_stream_entity.dart';
 export 'stream_entity_states/ld_theme_stream_entity.dart';
 
-// 🧩 Tipus de serialització i nom de camps.
-typedef EntityMap = Map<String, dynamic>;
+// 🧩 Noms dels camps.
 const String mfTimeStamp = "mfTimeStamp";
 const String mfTag       = "mfTag";
 const String mfFirstTime = "mfFirstTime";
@@ -37,16 +37,17 @@ abstract class LdStreamEnvelope {
     _tag = pTag, 
     _timestamp = pTimeStamp?? DateTime.now();
 
-  LdStreamEnvelope.fromMap({ required EntityMap pMap })
+  LdStreamEnvelope.fromMap({ required LdMap<dynamic> pMap })
   : _timestamp = ToolsDT.parse(pMap[mfTimeStamp]),
     _tag = pMap[mfTag];
 
   // 🌥️ FUNCIONS ABSTRACTES -----------
   @mustCallSuper
-  EntityMap toMap() {
-    return {
+  LdMap toMap() 
+    => LdMap({
       mfTimeStamp: ToolsDT.format(_timestamp),
       mfTag: _tag,
-    };
-  }
+    }
+  );
+  
 }

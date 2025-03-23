@@ -1,8 +1,10 @@
 // Classe per a la gestió de cues LiFo amb gestió de mapa.
 // createdAt: 2025/02/13 dj. GPT
 
+import 'package:ld_wbench4/05_tools/ld_map.dart';
+
 class LiFoMap<T> {
-  final Map<String, T> _map = {};
+  final LdMap<T> _map = LdMap<T>({});
   final List<T> _list = <T>[];
   final int _maxLength;
 

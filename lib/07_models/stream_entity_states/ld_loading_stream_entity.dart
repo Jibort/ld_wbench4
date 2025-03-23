@@ -3,6 +3,7 @@
 
 // ignore_for_file: use_super_parameters
 
+import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
 class LdLoadingStreamEntity 
@@ -16,7 +17,7 @@ extends LdStateStreamEntity {
     required super.pTag,
   }): super(pState: LdEntityState.loading);
 
-  LdLoadingStreamEntity.fromMap(EntityMap pMap)
+  LdLoadingStreamEntity.fromMap(LdMap pMap)
   : super.fromMap(pMap: pMap);
 
   // 🌥️ 'LdStreamEntity' --------------

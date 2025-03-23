@@ -3,6 +3,7 @@
 
 // ignore_for_file: use_super_parameters
 
+import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
 
 class   LdPreparingStreamEntity 
@@ -20,7 +21,7 @@ extends LdStateStreamEntity {
   // 🛠️ MÈTODES -----------------------
   bool get isFirstLoad => _isVirgin;
 
-  LdPreparingStreamEntity.fromMap({ required EntityMap pMap, bool pIsVirgin = true })
+  LdPreparingStreamEntity.fromMap({ required LdMap pMap, bool pIsVirgin = true })
   : _isVirgin  = pIsVirgin,
     super.fromMap(pMap: pMap);
 
