@@ -3,18 +3,24 @@
 
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:ld_wbench4/01_views/test_01/ld_test_01_ctrl.dart';
+import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
 import 'package:ld_wbench4/03_core/ld_view_state.dart';
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/client_model/ld_user_model.dart';
 import 'package:ld_wbench4/07_models/ld_model_stream_entity.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
-class   LdTest01State<T extends LdStreamEnvelope>
-extends LdViewState<T, LdTest01Ctrl<T> ,LdTest01State<T>> {
+class      LdTest01State<
+  T extends LdStreamEnvelope, 
+  V extends StatefulWidget,
+  TS extends LdTest01State<T, V, TS>
+>
+extends    LdViewState<T, V, LdTest01Ctrl<T, V>, TS>
+implements LdTagIntf  {
   // 📝 ESTÀTICS -----------------------
-  static const String className = "LdViewState";
   
   // 🧩 MEMBRES ------------------------
   int _delaySeconds; // Retard per defecte de 2 segons
@@ -28,10 +34,15 @@ extends LdViewState<T, LdTest01Ctrl<T> ,LdTest01State<T>> {
   set userCount(int value) => _userCount = value;
 
   // 🛠️ CONSTRUCTOR/DISPOSE -----------
-  LdTest01State({ int pSecs = 2, int pCount = 10 })
-  : _delaySeconds = pSecs, 
-    _userCount   = pCount,
-    super(pTag: LdTest01State.className);
+  LdTest01State({
+    super.pTag, 
+    required super.pTitle,
+    super.pSubtitle,
+    int pSecs = 2, 
+    int pCount = 10 
+  }): 
+    _delaySeconds = pSecs, 
+    _userCount   = pCount;
 
   @override  
   void dispose() {
@@ -40,7 +51,7 @@ extends LdViewState<T, LdTest01Ctrl<T> ,LdTest01State<T>> {
 
   // 🌥️ 'LdViewState' -----------------
   @override
-  Future<T?> dataProcess(String? pTag) async {
+  Future<T?> dataProcess({ String? pSrcTag, String? pTgtTag }) async {
     try {
       // Construir l'URL amb els paràmetres configurats
       final url = 'https://randomuser.me/api/?results=$_userCount&delay=${_delaySeconds * 1000}';
@@ -62,7 +73,8 @@ extends LdViewState<T, LdTest01Ctrl<T> ,LdTest01State<T>> {
         
         // Retornar les dades dins d'una entitat de stream adequada
         return LdModelStreamEntity<UsersResponse>(
-          pTag: pTag ?? tag,
+          pSrcTag: pSrcTag ?? tag,
+          pTgtTag: pTgtTag,
           pData: usersResponse
         ) as T;
       } else {
@@ -80,4 +92,7 @@ extends LdViewState<T, LdTest01Ctrl<T> ,LdTest01State<T>> {
     await loadData();
   }
   
+  // 🌥️ 'LdTagIntf' -------------------
+  @override
+  String get baseTag => "LdTest01State";
 }

@@ -4,7 +4,9 @@
 // ignore_for_file: use_super_parameters
 
 import 'package:ld_wbench4/05_tools/ld_map.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/07_models/ld_model.dart';
+import 'package:ld_wbench4/07_models/models.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 class   LdLoadedStreamEntity<T>
 extends LdStateStreamEntity {
@@ -19,7 +21,8 @@ extends LdStateStreamEntity {
   // 🛠️ CONSTRUCTORS ------------------
   LdLoadedStreamEntity({
     super.pTimeStamp,
-    required super.pTag, 
+    required super.pSrcTag,
+    super.pTgtTag, 
     required T pData,
     required bool pFirstTime, 
  })
@@ -28,15 +31,15 @@ extends LdStateStreamEntity {
     super(pState: LdEntityState.loaded);
   
     LdLoadedStreamEntity.fromMap(LdMap pMap)
-    : _data = pMap[mfData],
-      _firstTime = pMap[mfFirstTime],
+    : _data = pMap[LdModel.mfModel],
+      _firstTime = pMap[LdStreamEnvelope.mfFirstTime],
       super.fromMap(pMap: pMap);
 
     // 🌥️ 'LdStreamEntity' --------------
   @override
   LdMap toMap() {
     LdMap map = super.toMap();
-    map[mfData] = _data;
+    map[LdModel.mfModel] = _data;
     return map;
   }
 }

@@ -4,7 +4,8 @@
 // ignore_for_file: use_super_parameters
 
 import 'package:ld_wbench4/05_tools/ld_map.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/07_models/ld_model.dart';
+import 'package:ld_wbench4/07_models/models.dart';
 
 class LdThemeStreamEntity<T>
 extends LdStateStreamEntity {
@@ -17,20 +18,21 @@ extends LdStateStreamEntity {
   // 🛠️ CONSTRUCTORS ------------------
   LdThemeStreamEntity({
     super.pTimeStamp,
-    required super.pTag, 
+    required super.pSrcTag, 
+    super.pTgtTag,
     required T pData, })
   : _data = pData,
     super(pState: LdEntityState.updatingTheme);
   
     LdThemeStreamEntity.fromMap(LdMap pMap)
-    : _data = pMap[mfData],
+    : _data = pMap[LdModel.mfModel],
       super.fromMap(pMap: pMap);
 
     // 🌥️ 'LdStreamEntity' --------------
   @override
   LdMap toMap() {
     LdMap map = super.toMap();
-    map[mfData] = _data;
+    map[LdModel.mfModel] = _data;
     return map;
   }
 }

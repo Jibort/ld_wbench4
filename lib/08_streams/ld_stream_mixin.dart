@@ -1,19 +1,29 @@
-// Mixim per a l'administració d'streams.
+// ld_stream_mixin.dart
+// 
+// Mixin per a l'administració d'streams.
+//
+//    Existeixen diferents tipus d'streams:
+//    1. Notificació dels canvis als estats de l'aplicació i de les vistes.
+//    2. Notificació dels canvis a l'estat dels processos de càrrega asíncrones.
+//    3. Notificació de l'alternança entre tema clar i tema fosc.
 // CreatedAt: 2025/08/21 dv. JIQ
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+
 import 'package:ld_wbench4/05_tools/debug.dart';
 import 'package:ld_wbench4/07_models/ld_model.dart';
 import 'package:ld_wbench4/07_models/ld_model_stream_entity.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/07_models/stream_entity_states/ld_error_stream_entity.dart';
+import 'package:ld_wbench4/07_models/stream_entity_states/ld_loaded_stream_entity.dart';
+import 'package:ld_wbench4/07_models/stream_entity_states/ld_loading_stream_entity.dart';
+import 'package:ld_wbench4/07_models/stream_entity_states/ld_reloading_stream_entity.dart';
+import 'package:ld_wbench4/07_models/stream_entity_states/ld_theme_stream_entity.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
+import 'package:ld_wbench4/08_streams/events/views/ld_preparing_view_stream_event.dart';
 
-mixin LdStreamMixin<
-  E extends LdStreamEnvelope
-> {
+mixin LdStreamMixin<E extends LdStreamEnvelope> {
   // 📝 ESTÀTICS -----------------------
-  static const String className = "LdStreamMixin";
   
   // 🧩 MEMBRES ------------------------
   late final StreamController<E>? _streamCtrl;
@@ -35,69 +45,78 @@ mixin LdStreamMixin<
   Stream<E>? get stream => _streamCtrl?.stream;
 
   /// Subscriu un oidor a l'stream associat al controlador.
-  StreamSubscription<E>? subscribe(
-    void Function(E) pLstn,
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,)
+  StreamSubscription<E>? subscribe({
+    required void Function(E) pLstn,
+    Function? pOnError,
+    void Function()? pOnDone,
+    bool? cancelOnError })
     => (stream != null)
       ? stream!.listen(
           pLstn,
-          onError: onError,
-          onDone: onDone, 
+          onError: pOnError,
+          onDone: pOnDone, 
           cancelOnError: cancelOnError
         )
       : null;
   
+  /// Desubscriu un oidor de l'stream associat al controlador.
+  void unsubscribe(StreamSubscription<E>? pLstn) {
+    if (pLstn != null) {
+      pLstn.cancel();
+    }
+  }
+
   // 🌥️ ESTATS -----------------------
   /// Emet que una estructura de dades.
-  void emitData<T extends LdModel>({ required String pTag, required T pData }) {
+  void emitData<T extends LdModel>({ required String pSrcTag, String? pTgtTag, T? pData }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdModelStreamEntity<T>(pTag: pTag, pData: pData) as E);
+    _streamCtrl.add(LdModelStreamEntity<T>(pSrcTag: pSrcTag, pTgtTag: pTgtTag, pData: pData) as E);
   }
 
   /// Emet que s'està preparant la càrrega de dades
-  void emitPreparing({ required String pTag, bool pIsVirgin = true}) {
+  void emitPreparing({ required String pSrcTag, String? pTgtTag, bool pIsVirgin = true}) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdPreparingStreamEntity(pTag: pTag, pIsVirgin: pIsVirgin) as E);
+    _streamCtrl.add(LdPreparingViewStreamEvent(pSrcTag: pSrcTag, pTgtTag: pTgtTag, pIsVirgin: pIsVirgin) as E);
   }
   
   /// Emet que s'està carregant les dades
-  void emitLoading({ required String pTag }) {
+  void emitLoading({ required String pSrcTag, String? pTgtTag }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdLoadingStreamEntity(pTag: pTag) as E);
+    _streamCtrl.add(LdLoadingStreamEntity(pSrcTag: pSrcTag, pTgtTag: pTgtTag) as E);
   }
   
   /// Emet que les dades s'han carregat correctament
-  void emitLoaded<D>({ required String pTag, required D data, bool pIsVirgin = true }) {
+  void emitLoaded<D>({ required String pSrcTag, String? pTgtTag, required D data, bool pIsVirgin = true }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdLoadedStreamEntity<D>(pTag: pTag, pData: data, pFirstTime: pIsVirgin) as E);
+    _streamCtrl.add(LdLoadedStreamEntity<D>(pSrcTag: pSrcTag, pTgtTag: pTgtTag, pData: data, pFirstTime: pIsVirgin) as E);
   }
 
   /// Emet que s'ha produït un error durant la càrrega
-  void emitError({ required String pTag, required String error, Exception? exception }) {
+  void emitError({ required String pSrcTag, String? pTgtTag, required String error, Exception? exception }) {
     Debug.error(error, exception);
     
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
     _streamCtrl.add(LdErrorStreamEntity(
-      pTag: pTag, 
-      pError: error, 
+      pSrcTag: pSrcTag,
+      pTgtTag: pTgtTag,
+      pError: error,
       pException: exception
     ) as E);
   }
   
   /// Emet que s'està tornant a carregar les dades
-  void emitReloading({ required String pTag }) {
+  void emitReloading({ required String pSrcTag, String? pTgtTag }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdReLoadingStreamEntity(pTag: pTag) as E);
+    _streamCtrl.add(LdReLoadingStreamEntity(pSrcTag:  pSrcTag, pTgtTag: pTgtTag) as E);
   }
   
   /// Emet un canvi de tema
-  void emitThemeUpdate({ required String pTag, required ThemeData pTData }) {
+  void emitThemeUpdate({ required String pSrcTag, String? pTgtTag, required ThemeData pTData }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
     _streamCtrl.add(LdThemeStreamEntity(
-      pTag: pTag, 
-      pData: pTData
+      pSrcTag: pSrcTag,
+      pTgtTag: pTgtTag, 
+      pData:   pTData
     ) as E);
   }
 

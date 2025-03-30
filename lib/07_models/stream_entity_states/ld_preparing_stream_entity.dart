@@ -4,7 +4,7 @@
 // ignore_for_file: use_super_parameters
 
 import 'package:ld_wbench4/05_tools/ld_map.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/07_models/models.dart';
 
 class   LdPreparingStreamEntity 
 extends LdStateStreamEntity {
@@ -14,7 +14,7 @@ extends LdStateStreamEntity {
   // 📥 GETTERS/SETTERS ----------------
   
   // 🛠️ CONSTRUCTORS ------------------
-  LdPreparingStreamEntity({ required super.pTag, bool pIsVirgin = true })
+  LdPreparingStreamEntity({ required super.pSrcTag, super.pTgtTag, bool pIsVirgin = true })
   : _isVirgin = pIsVirgin, 
     super(pState: LdEntityState.preparing);
   

@@ -1,25 +1,29 @@
 // Abstracció del controlador d'una vista.
 // CreatedAt: 2025/03/18 dt. 
 
+import 'package:flutter/material.dart';
 import 'package:ld_wbench4/03_core/ld_ctrl.dart';
+import 'package:ld_wbench4/03_core/ld_view.dart';
 import 'package:ld_wbench4/03_core/ld_widget.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 abstract class LdWidgetCtrl<
   T  extends LdStreamEnvelope,
-  WC extends LdWidgetCtrl<T, WC, WS>,
+  V  extends StatefulWidget,
+  WC extends LdWidgetCtrl<T, V, WC, WS>,
   WS extends LdWidgetState<T, WC, WS>
 >
-extends LdCtrl<T, WS> {
+extends LdCtrl<T, V, WS> {
   // 📝 ESTÀTICS -----------------------
-  static const String className = "LdWidgetCtrl";
   
   // 🧩 MEMBRES ------------------------
-  
-  // 📥 GETTERS/SETTERS ----------------
-  
+  final LdView _view;
+
   // 🛠️ CONSTRUCTOR/DISPOSE -----------
-  LdWidgetCtrl({ required super.pTag });
+  LdWidgetCtrl({
+    required super.pTag,
+    required LdView pView,
+  }): _view = pView;
 
   @override  
   void dispose() {
@@ -27,7 +31,6 @@ extends LdCtrl<T, WS> {
   }
   
   // 📥 GETTERS/SETTERS ----------------
-
-  // 🌥️ 'LdCtrl' ----------------------
+  LdView get view => _view;
 
 }

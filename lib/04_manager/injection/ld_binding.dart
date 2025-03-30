@@ -2,11 +2,8 @@
 // CreatedAt: 2025/03/08 dt. JIQ
 
 import 'package:intl/intl.dart';
-import 'package:ld_wbench4/03_core/ld_ctrl.dart';
+import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
 import 'package:ld_wbench4/03_core/ld_tag_mixin.dart';
-import 'package:ld_wbench4/03_core/ld_state.dart';
-import 'package:ld_wbench4/03_core/ld_view.dart';
-import 'package:ld_wbench4/03_core/ld_widget.dart';
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 
 class LdBinding<T extends LdTagMixin> {
@@ -17,7 +14,7 @@ class LdBinding<T extends LdTagMixin> {
   static String get _newWidget => NumberFormat('00000').format(_widgets++);
   static int _states = 0;
   static String get _newState => NumberFormat('00000').format(_states++);
-static int _ctrls = 0;
+  static int _ctrls = 0;
   static String get _newCtrl => NumberFormat('00000').format(_ctrls++);
 
   // 📝 SINGLETON ----------------------
@@ -47,34 +44,31 @@ static int _ctrls = 0;
   // Retorna la instància enregistrada associada amb el tag o nul.
   LdTagMixin? get(String pTag) => _map[pTag];
 
-  // 📝 FUNCIONS ESTÀTIQUES ------------
+  // 📝 CREACIÓ DE TAGS ----------------
   String newViewTag(dynamic pBase) {
-    assert((pBase! is String) && (pBase! is T));
-
+    assert((pBase == null || pBase! is String || pBase! is T), "LdTagMixin.newViewTag(pBase): pBase no és nul ni cap tipus acceptat!");
     String tag;
 
     if (pBase == null) {
-      tag = "${LdView.className}[$_newView]";
+      tag = "LdView[$_newView]";
     } else if (pBase is String) {
       tag = "$pBase[$_newView]";
-    } else {  // Necessàriament és una classe que estèn LdView.
-      tag = "${T.runtimeType.toString()}[$_newView]";
+    } else {
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newView]";
     }
-
     return tag;
   }
 
   String newWidgetTag(dynamic pBase) {
     assert((pBase! is String) && (pBase! is T));
-
     String tag;
 
     if (pBase == null) {
-      tag = "${LdWidget.className}[$_newWidget]";
+      tag = "LdWidget[$_newWidget]";
     } else if (pBase is String) {
       tag = "$pBase[$_newWidget]";
-    } else {  // Necessàriament és una classe que estèn LdWidget.
-      tag = "${T.runtimeType.toString()}[$_newWidget]";
+    } else {
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newView]";
     }
 
     return tag;
@@ -86,27 +80,27 @@ static int _ctrls = 0;
     String tag;
 
     if (pBase == null) {
-      tag = "${LdState.className}[$_newState]";
+      tag = "LdState[$_newState]";
     } else if (pBase is String) {
       tag = "$pBase[$_newState]";
-    } else {  // Necessàriament és una classe que estèn LdWidget.
-      tag = "${T.runtimeType.toString()}[$_newState]";
+    } else {
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newView]";
     }
 
     return tag;
   }
 
-    String newCtrlTag(dynamic pBase) {
+  String newCtrlTag(dynamic pBase) {
     assert((pBase! is String) && (pBase! is T));
 
     String tag;
 
     if (pBase == null) {
-      tag = "${LdCtrl.className}[$_newCtrl]";
+      tag = "LdCtrl[$_newCtrl]";
     } else if (pBase is String) {
       tag = "$pBase[$_newCtrl]";
-    } else {  // Necessàriament és una classe que estèn LdCtrl.
-      tag = "${T.runtimeType.toString()}[$_newCtrl]";
+    } else {
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newView]";
     }
 
     return tag;

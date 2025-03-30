@@ -2,14 +2,14 @@
 // CreatedAt: 2025/03/18 dt. JIQ
 
 import 'package:ld_wbench4/05_tools/ld_map.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 
 // 🧩 Tipus de serialització i nom de camps.
-const String mapState = "mapState";
-const String mapError = "mapError";
+const String mapState     = "mapState";
+const String mapError     = "mapError";
 const String mapException = "mapException";
-const String mapData = "mapData";
+const String mapData      = "mapData";
 
 // Estats on es pot trobar l'entitat.
 enum LdEntityState {
@@ -25,24 +25,22 @@ enum LdEntityState {
   
   // Mètode estàtic per convertir des d'un valor dinàmic a l'enum corresponent
   static LdEntityState parseState(dynamic value) {
-    if (value == null) {
-      return LdEntityState.preparing;
-    }
-    
-    // Si és un índex numèric
-    if (value is int && value >= 0 && value < LdEntityState.values.length) {
-      return LdEntityState.values[value];
-    }
-    
-    // Si és una cadena
-    if (value is String) {
-      // Primer provem si és només el nom de l'element
-      try {
-        return LdEntityState.values.firstWhere(
-          (e) => e.name == value || e.toString() == value,
-          orElse: () => LdEntityState.preparing,
-        );
-      } catch (_) { } // Obviem els possibles errors
+    if (value != null) {
+      // Si és un índex numèric
+      if (value is int && value >= 0 && value < LdEntityState.values.length) {
+        return LdEntityState.values[value];
+      }
+      
+      // Si és una cadena
+      if (value is String) {
+        // Primer provem si és només el nom de l'element
+        try {
+          return LdEntityState.values.firstWhere(
+            (e) => e.name == value || e.toString() == value,
+            orElse: () => LdEntityState.preparing,
+          );
+        } catch (_) { } // Obviem els possibles errors
+      }
     }
     
     // Valor per defecte
@@ -56,13 +54,14 @@ extends LdStreamEnvelope {
   late LdEntityState _state;
 
   // 📥 GETTERS/SETTERS ----------------
-  LdEntityState get state => _state;
+  LdEntityState get state        => _state;
   set state(LdEntityState value) => _state = value;
 
   // 🛠️ CONSTRUCTORS ------------------
   LdStateStreamEntity({
     super.pTimeStamp,
-    required super.pTag,
+    required super.pSrcTag,
+    String? pTgtTag,
     required LdEntityState pState,
   }): _state = pState;
 

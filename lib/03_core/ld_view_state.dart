@@ -3,23 +3,35 @@
 
 import 'package:ld_wbench4/03_core/ld_state.dart';
 import 'package:ld_wbench4/03_core/ld_view.dart';
-import 'package:ld_wbench4/07_models/models.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 abstract class LdViewState<
-  T  extends LdStreamEnvelope,
-  VC extends LdViewCtrl<T, VC, VS>,
-  VS extends LdViewState<T, VC, VS>
->
-extends LdState<T, VC> {
+  T extends LdStreamEnvelope,
+  C extends LdViewCtrl<T, dynamic, dynamic>,
+  V extends LdView<T, dynamic>
+> extends LdState<T, C> {
   // 📝 ESTÀTICS -----------------------
-  static const String className = "LdViewState";
   
-  // 🛠️ CONSTRUCTOR/DISPOSE -----------
-  LdViewState({ required super.pTag });
+  // 🧩 MEMBRES ------------------------
+  String  _title;
+  String? _subTitle;
 
-  @override  
+  // 📥 GETTERS/SETTERS ----------------
+  String  get title    => _title;
+  String? get subTitle => _subTitle;
+  void setTitles(String pTitle, String pSubtitle) {
+    _title = pTitle;
+    _subTitle = pSubtitle;
+    emitData(pSrcTag: tag, pTgtTag: ctrl.tag);
+  }
+
+  // 🛠️ CONSTRUCTOR/DISPOSE -----------
+  LdViewState({ required String pTitle, String? pSubtitle, super.pTag })
+  : _title = pTitle,
+    _subTitle = pSubtitle;
+
+  @override
   void dispose() {
     super.dispose();
   }
-
 }

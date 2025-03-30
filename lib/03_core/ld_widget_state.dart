@@ -3,7 +3,7 @@
 
 import 'package:ld_wbench4/03_core/ld_state.dart';
 import 'package:ld_wbench4/03_core/ld_widget.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 abstract class LdWidgetState<
   T  extends LdStreamEnvelope,
@@ -12,7 +12,6 @@ abstract class LdWidgetState<
 >
 extends LdState<T, WC> {
   // 📝 ESTÀTICS -----------------------
-  static const String className = "LdWidgetState";
   
   // 🧩 MEMBRES ------------------------
 

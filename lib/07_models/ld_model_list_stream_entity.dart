@@ -6,7 +6,7 @@
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/client_model/ld_user_model.dart';
 import 'package:ld_wbench4/07_models/ld_models_list.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 class LdModelsListStreamEntity<T extends LdModelsList>
 extends LdStreamEnvelope {
@@ -19,19 +19,20 @@ extends LdStreamEnvelope {
   // 🛠️ CONSTRUCTORS ------------------
   LdModelsListStreamEntity({
     super.pTimeStamp,
-    required super.pTag, 
-    required T pList, })
-  : _list = pList;
+    required super.pSrcTag, 
+    required super.pTgtTag, 
+    required T pList,
+  }): _list = pList;
   
     LdModelsListStreamEntity.fromMap(LdMap pMap)
-    : _list = pMap[UserModel.mfUsers],
+    : _list = pMap[UserModel.mfList],
       super.fromMap(pMap: pMap);
 
     // 🌥️ 'LdStreamEntity' --------------
   @override
   LdMap toMap() {
     LdMap map = super.toMap();
-    map[mfData] = _list;
+    map[LdModelsList.mfList] = _list;
     return map;
   }
 }

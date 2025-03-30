@@ -8,14 +8,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:ld_wbench4/03_core/ld_state.dart';
 import 'package:ld_wbench4/05_tools/debug.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope.dart';
+import 'package:ld_wbench4/07_models/stream_entity_states/ld_theme_stream_entity.dart';
+import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 class LdTheme<T extends LdThemeStreamEntity> {
   // 📝 ESTÀTICS -----------------------
-  static const String className = "LdTheme";
   static bool enabled = false;
   static late final LdTheme? _single;
-
+  
   static LdTheme get single {
     if (!enabled) {
       enabled = true;
@@ -507,7 +507,7 @@ class LdTheme<T extends LdThemeStreamEntity> {
 
     // Canviar el tema i notificar a los oyentes
     pState.emitThemeUpdate(
-      pTag: pState.tag, 
+      pSrcTag:  pState.tag, 
       pTData: (_isDarkMode)
         ? darkTheme
         : lightTheme);

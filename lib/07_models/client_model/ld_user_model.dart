@@ -8,14 +8,13 @@ import 'package:ld_wbench4/07_models/ld_model.dart';
 class UserModel
 extends LdModel {
   // 📝 ESTÀTICS -----------------------
-  static const String className = "UserModel";
-
   static const String mfId       = "mfUserId";
   static const String mfName     = "mfUserName";
   static const String mfEmail    = "mfUserEmail";
   static const String mfImageUrl = "mfUserImageUrl";
   static const String mfUsers    = "mfUsers";
-
+  static const String mfList     = "mfList";
+  
   // 🧩 MEMBRES ------------------------
   final String name;
   final String email;
@@ -54,6 +53,10 @@ extends LdModel {
       mfImageUrl: imageUrl,
     }
   );
+  
+  // 🌥️ 'LdTagIntf' -------------------
+  @override
+  String get baseTag => "UserModel";
 }
 
 // Model de dades per la resposta de la API
@@ -73,5 +76,9 @@ extends LdModel {
   LdMap toMap() => LdMap({
     UserModel.mfUsers: users,
   });
+
+  // 🌥️ 'LdTagIntf' -------------------
+  @override
+  String get baseTag => "UserResponse";
 }
 
