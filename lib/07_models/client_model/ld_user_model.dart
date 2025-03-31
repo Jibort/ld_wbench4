@@ -22,7 +22,7 @@ extends LdModel {
 
   // 🛠️ CONSTRUCTORS ------------------
   UserModel({
-    required super.id,
+    super.pId,
     required this.name,
     required this.email,
     required this.imageUrl,
@@ -30,7 +30,7 @@ extends LdModel {
 
   factory UserModel.fromMap(LdMap pMap) 
     => UserModel(
-      id: pMap[mfId],
+      pId: pMap[mfId],
       name: pMap[UserModel.mfName],
       email: pMap[mfEmail],
       imageUrl: pMap[mfImageUrl],
@@ -65,7 +65,7 @@ extends LdModel {
   final List<UserModel> users;
 
   UsersResponse({ required this.users })
-  : super(id: "UsersResponse[$users.length]");
+  : super();
   
   @override // Arrel
   void dispose() {

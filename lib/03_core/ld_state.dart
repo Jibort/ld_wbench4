@@ -1,119 +1,150 @@
-// Abstracció d'un estat general de l'aplicació.
-// CreatedAt: 2025/08/18 dt. JIQ
+// ld_state.dart
+// 
+// Estat general d'un controlador.
+// CreatedAt: 2025/03/31 dl. CLA[JIQ]
 
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:ld_wbench4/03_core/ld_ctrl.dart';
+import 'package:ld_wbench4/03_core/ld_event_emitter_mixin.dart';
 import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
-import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
-import 'package:ld_wbench4/08_streams/ld_stream_mixin.dart';
-
 import 'package:ld_wbench4/03_core/ld_tag_mixin.dart';
 import 'package:ld_wbench4/04_manager/injection/ld_binding.dart';
+import 'package:ld_wbench4/07_models/ld_model.dart';
 
-abstract class LdState<
-  T extends LdStreamEnvelope,
-  C extends LdCtrl<T, StatefulWidget, LdState<T, C>>
-> 
-with       LdTagMixin, LdStreamMixin<T>
+abstract   class LdState<T extends LdModel>
+with       LdTagMixin, LdEventEmitterMixin
 implements LdTagIntf {
-  // 📝 ESTÀTICS -----------------------
-  
-  // 🧩 MEMBRES ------------------------
-  bool _isVirgin = true;
-  bool _isCtrlSet = false;
+  bool _isVirgin = true, _isCtrlSet = false;
   late LdCtrl _ctrl;
+  bool _isLoading = false, _isError = false;
+  String? _errorMessage;
+  (int, int, double?) _stats = (0, 0, null);
+  String? _loadingElement;
 
-  // 🛠️ CONSTRUCTOR/DISPOSE -----------
-  LdState({String? pTag, bool pCreateStream = true }) {
+  LdState({String? pTag}) {
     LdBinding bind = LdBinding.single;
     tag = bind.newStateTag(pTag ?? baseTag);
     bind.add(tag, this);
-    if (pCreateStream) {
-      initStream();
-    }
   }
 
   void dispose() {
-    disposeStream();
     LdBinding.single.remove(tag);
   }
 
-  // 📥 GETTERS/SETTERS ----------------
+  // Getters
   LdCtrl get ctrl => _ctrl;
+  bool get isLoading => _isLoading;
+  bool get isError => _isError;
+  String? get errorMessage => _errorMessage;
+  (int, int, double?) get stats => _stats;
+  String? get loadingElement => _loadingElement;
+  String? get title => null;
+  String? get subtitle => null;
+
+  // Setter per al controlador
   set ctrl(LdCtrl pCtrl) {
     assert(!_isCtrlSet);
     _isCtrlSet = true;
     _ctrl = pCtrl;
   }
 
-  // 🔄 CICLE DE CÀRREGA -------------
-  /// Funció a implementar en cada classe filla per a la càrrega de les dades.
-  Future<T?> dataProcess({ String? pSrcTag, String? pTgtTag });
+  // Mètodes per emetre diferents estats
+  void emitPreparing({ required String pSrcTag, List<String>? pTgtTags,
+                      required bool pIsVirgin }) {
+    _isLoading = true;
+    _isError = false;
+    
+    emitEvent(LdStateChangedEvent(
+      state: LdPreparingStreamEntity(),
+      sourceTag: tag
+    ));
+  }
 
-  /// Executa la càrrega completa de dades
-  /// Segueix el flux: Preparant -> Carregant -> Carregat/Error
-  Future<T?> loadData({ String? pSrcTag, String? pTgtTag }) async {
+  void emitLoading({required String pSrcTag, List<String>? pTgtTags, String? element}) {
+    _isLoading = true;
+    _isError = false;
+    _loadingElement = element;
+    
+    emitEvent(LdStateChangedEvent(
+      state: LdLoadingStreamEntity(),
+      sourceTag: tag
+    ));
+  }
+
+  void emitReloading({required String pSrcTag, List<String>? pTgtTags}) {
+    _isLoading = true;
+    _isError = false;
+    
+    emitEvent(LdStateChangedEvent(
+      state: LdReloadingStreamEntity(),
+      sourceTag: tag
+    ));
+  }
+
+  void emitLoaded({required String pSrcTag, List<String>? pTgtTags, T? data}) {
+    _isLoading = false;
+    _isError = false;
+    
+    emitEvent(LdStateChangedEvent(
+      state: LdLoadedStreamEntity<T>(data: data),
+      sourceTag: tag
+    ));
+  }
+
+  void emitError({
+    required String pSrcTag,
+    List<String>? pTgtTags,
+    required String error,
+    Exception? exception
+  }) {
+    _isLoading = false;
+    _isError = true;
+    _errorMessage = error;
+    
+    emitEvent(LdStateChangedEvent(
+      state: LdErrorStreamEntity(error: error, exception: exception),
+      sourceTag: tag
+    ));
+  }
+
+  void updateStats(int total, int current, [double? percentage]) {
+    _stats = (total, current, percentage);
+    
+    // Opcional: emetre un event específic per a actualització d'estadístiques
+    emitEvent(LdStatsUpdatedEvent(
+      stats: _stats,
+      sourceTag: tag
+    ));
+  }
+
+  // Cicle de càrrega
+  Future<T?> dataProcess({String? pSrcTag, List<String>? pTgtTags});
+
+  Future<T?> loadData({String? pSrcTag, List<String>? pTgtTags}) async {
     T? result;
 
-    emitPreparing(pSrcTag: pSrcTag?? tag, pTgtTag: pTgtTag, pIsVirgin: _isVirgin);
+    emitPreparing(pSrcTag: pSrcTag ?? tag, pTgtTags: pTgtTags, pIsVirgin: _isVirgin);
     
-    // Donem un petit temps perquè la UI mostri l'estat "preparant" abans de canviar a "carregant"
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      (_isVirgin)
-        ? emitLoading(pSrcTag: pSrcTag?? tag, pTgtTag: pTgtTag)
-        : emitReloading(pSrcTag: pSrcTag?? tag, pTgtTag: pTgtTag);
-      
-      try {
-        result = await dataProcess(pSrcTag: pSrcTag,  pTgtTag: pTgtTag);
-        _isVirgin = false;
-        emitLoaded(pSrcTag: pSrcTag?? tag, pTgtTag: pTgtTag, data: result);
-
-      } on Exception catch (exc) {
-        String msg = "$baseTag.loadData(): ${exc.toString()}";
-        emitError(
-          pSrcTag:   pSrcTag?? tag,
-          pTgtTag:   pTgtTag,
-          error:     msg, 
-          exception: Exception(msg)
-        );
-      } on Error catch (err) {
-        String msg = "$baseTag.loadData(): ${err.toString()}";
-        emitError(
-          pSrcTag:   pSrcTag?? tag,
-          pTgtTag:   pTgtTag,
-          error:     msg, 
-          exception: Exception(msg)
-        );
-      }
-    });
-
-    return result;
-  }
-  
-  /// Executa una funció i captura errors
-  /// Útil per operacions que no afecten l'estat principal però poden fallar
-  Future<R?> safeExecute<R>({ String? pSrcTag, String? pTgtTag, required Future<R> Function() pCBack }) async {
+    // Donem un petit temps perquè la UI mostri l'estat "preparant" abans de 
+    // canviar a "carregant"
+    await Future.delayed(Duration(milliseconds: 50));
+    
+    (_isVirgin)
+      ? emitLoading(pSrcTag: pSrcTag ?? tag, pTgtTags: pTgtTags)
+      : emitReloading(pSrcTag: pSrcTag ?? tag, pTgtTags: pTgtTags);
+    
     try {
-      return await pCBack();
-    } on Exception catch (exc) {
-      String msg = "$baseTag.safeExecute(pSrcpTag: ${pSrcTag?? tag}, pTgtTag: $pTgtTag}, EXC): ${exc.toString()}";
+      result = await dataProcess(pSrcTag: pSrcTag, pTgtTags: pTgtTags);
+      _isVirgin = false;
+      emitLoaded(pSrcTag: pSrcTag ?? tag, pTgtTags: pTgtTags, data: result);
+    } catch (e) {
+      String msg = "$baseTag.loadData(): ${e.toString()}";
       emitError(
-        pSrcTag:   pSrcTag?? tag,
-        pTgtTag:   pTgtTag,
-        error:     msg, 
-        exception: Exception(msg)
-      );
-    } on Error catch (err) {
-      String msg = "$baseTag.safeExecute(pTag: ${pSrcTag?? tag}, pTgtTag: $pTgtTag}, ERR): ${err.toString()}";
-      emitError(
-        pSrcTag:   pSrcTag?? tag,
-        pTgtTag:   pTgtTag,
-        error:     msg, 
-        exception: Exception(msg)
+        pSrcTag: pSrcTag ?? tag,
+        pTgtTags: pTgtTags,
+        error: msg,
+        exception: e is Exception ? e : Exception(msg)
       );
     }
-    return null;
+
+    return result;
   }
 }

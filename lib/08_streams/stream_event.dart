@@ -1,6 +1,6 @@
 // stream_events.dart
 //
-//
+// Tipus de missatge event que pot contenir un Stream.
 // CreatedAt: 2025/03/26 dc. JIQ
 
 
@@ -14,7 +14,10 @@ enum StreamEvent {
   reloadingView,     // Determina que l'entitat està en estat de tornar a carregar-se.
 
   // SECCIÓ "CANVIS EN EL THEME" ------
-  updatingThemeMode; // Determina que s'està actualitzant el tema.
+  updatingThemeMode, // Determina que s'està actualitzant el tema.
+
+// SECCIÓ "CANVIS EN LA LLENGUA" ------
+  updatingLocale; // Determina que s'està actualitzant el tema.
 
   // Converteix l'enum a String per serialitzar
   String toValue() => name;

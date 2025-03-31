@@ -3,36 +3,40 @@
 
 // ignore_for_file: use_super_parameters
 
+import 'package:flutter/painting.dart';
 import 'package:ld_wbench4/05_tools/ld_map.dart';
-import 'package:ld_wbench4/07_models/ld_model.dart';
 import 'package:ld_wbench4/07_models/models.dart';
 
-class LdThemeStreamEntity<T>
+class LdLocaleStreamEntity
 extends LdStateStreamEntity {
+  // 📝 ESTÀTICS -----------------------
+  static const String mfLocale = "mfLocale";
+
   // 🧩 MEMBRES ------------------------
-  final T _data;
+  final Locale _locale;
   
   // 📥 GETTERS/SETTERS ----------------
-  T get data => _data;
-  
+  Locale get locale => _locale;
+  String get language => _locale.languageCode;
+
   // 🛠️ CONSTRUCTORS ------------------
-  LdThemeStreamEntity({
+  LdLocaleStreamEntity({
     super.pTimeStamp,
     required super.pSrcTag, 
     super.pTgtTags,
-    required T pData, })
-  : _data = pData,
-    super(pState: LdEntityState.updatingTheme);
+    required Locale pLocale, })
+  : _locale = pLocale,
+    super(pState: LdEntityState.updatingLang);
   
-    LdThemeStreamEntity.fromMap(LdMap pMap)
-    : _data = pMap[LdModel.mfModel],
+    LdLocaleStreamEntity.fromMap(LdMap pMap)
+    : _locale = pMap[mfLocale],
       super.fromMap(pMap: pMap);
 
     // 🌥️ 'LdStreamEntity' --------------
   @override
   LdMap toMap() {
     LdMap map = super.toMap();
-    map[LdModel.mfModel] = _data;
+    map[mfLocale] = _locale;
     return map;
   }
 }

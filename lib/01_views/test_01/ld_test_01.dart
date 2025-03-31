@@ -1,28 +1,32 @@
 //
 // CreatedAt: 2025/03/21 dv. JIQ
 
-import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
-import 'package:ld_wbench4/03_core/ld_view.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ld_wbench4/01_views/test_01/ld_test_01_state.dart';
 
-class      LdTest01
-extends    LdView 
-implements LdTagIntf {
-  // 📝 ESTÀTICS -----------------------
-
-  // 🛠️ CONSTRUCTOR/DISPOSE -----------
-  LdTest01({
-    String? pTag,
-    required super.pState,
-    required super.pCtrl
-  }): super(pTag: pTag, );
-  
-  // 'LdTagIntf' ----------------------
+class LdTest01
+extends StatefulWidget {
   @override
-  String get baseTag => "LdTest01";
-  
-  // ´LdView´ -------------------------
-  @override
-  createState() {
-    
-  }
+  State<LdTest01> createState() => LdTest01State();
 }
+// class      LdTest01
+// extends    LdView {
+//   // 📝 ESTÀTICS -----------------------
+
+//   // 🛠️ CONSTRUCTOR/DISPOSE -----------
+//   LdTest01({
+//     super.key, 
+//     super.pTag,
+//     required super.pState,
+//   });
+  
+//   // 'LdTagIntf' ----------------------
+//   @override
+//   String get baseTag => "LdTest01";
+  
+//   // ´LdView´ -------------------------
+//   @override
+//   LdViewCtrl<LdView> createState() {
+//     throw Exception("erwerwe");
+//   }
+// }

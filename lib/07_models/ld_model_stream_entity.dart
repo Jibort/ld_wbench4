@@ -5,7 +5,6 @@
 
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/ld_model.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope_old.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 
 class LdModelStreamEntity<T extends LdModel>
@@ -20,7 +19,7 @@ extends LdStreamEnvelope {
   LdModelStreamEntity({
     super.pTimeStamp,
     required super.pSrcTag, 
-    required super.pTgtTag, 
+    required super.pTgtTags, 
     required T? pData, })
   : _data = pData;
   

@@ -3,7 +3,6 @@
 // Definició d'un event de 'preparació' per a la càrrega d'una vista.
 // CreatedAt: 2025/03/26 dc. JIQ
 
-import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/08_streams/events/ld_stream_event.dart';
 import 'package:ld_wbench4/08_streams/stream_event.dart';
 
@@ -15,16 +14,16 @@ extends LdStreamEvent {
   // 📥 GETTERS/SETTERS ----------------
   
   // 🛠️ CONSTRUCTORS ------------------
-  LdPreparingViewStreamEvent({ required super.pSrcTag, super.pTgtTag, bool pIsVirgin = true })
+  LdPreparingViewStreamEvent({ required super.pSrcTag, super.pTgtTags, bool pIsVirgin = true })
   : _isVirgin = pIsVirgin, 
     super(pState: StreamEvent.preparingView);
   
   // 🛠️ MÈTODES -----------------------
   bool get isFirstLoad => _isVirgin;
 
-  LdPreparingViewStreamEvent.fromMap({ required LdMap pMap, bool pIsVirgin = true })
+  LdPreparingViewStreamEvent.fromMap({ required super.pMap, bool pIsVirgin = true })
   : _isVirgin  = pIsVirgin,
-    super.fromMap(pMap: pMap);
+    super.fromMap();
 
   // 🌥️ 'LdStateStreamEntity' ---------
   // Innecessari.

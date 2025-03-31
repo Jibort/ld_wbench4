@@ -15,7 +15,7 @@ extends LdStateStreamEntity {
   // 🛠️ CONSTRUCTORS ------------------
   LdLoadingStreamEntity({ 
     required super.pSrcTag,
-    super.pTgtTag,
+    super.pTgtTags,
   }): super(pState: LdEntityState.loading);
 
   LdLoadingStreamEntity.fromMap(LdMap pMap)

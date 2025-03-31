@@ -16,7 +16,7 @@ extends LdStateStreamEntity {
   LdReLoadingStreamEntity({ 
     super.pTimeStamp,
     required super.pSrcTag,
-    String? pTgtTag,
+    List<String>? pTgtTags,
   }) : super(pState: LdEntityState.reloading);
 
   LdReLoadingStreamEntity.fromMap(LdMap pMap)

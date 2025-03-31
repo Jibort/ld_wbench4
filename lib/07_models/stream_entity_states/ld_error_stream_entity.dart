@@ -19,25 +19,25 @@ extends LdStateStreamEntity {
   // 🛠️ CONSTRUCTORS ------------------
   LdErrorStreamEntity({ 
     super.pTimeStamp,
-    required   super.pSrcTag,
-    String?    pTgtTag,
-    String?    pError,
-    Exception? pException,
+    required super.pSrcTag,
+    List<String>? pTgtTags,
+    String?       pError,
+    Exception?    pException,
   }) : 
     _error = pError, _exception = pException,
     super(pState: LdEntityState.error);
 
   LdErrorStreamEntity.fromMap(LdMap pMap)
-    : _error = pMap[mapError],
-      _exception = pMap[mapException],
+    : _error = pMap[mfError],
+      _exception = pMap[mfException],
       super.fromMap(pMap: pMap);
 
   // 🌥️ 'LdStreamEntity' --------------
   @override
   LdMap toMap() {
     LdMap map = super.toMap();
-    map[mapError]     = _error;
-    map[mapException] = _exception;
+    map[mfError]     = _error;
+    map[mfException] = _exception;
     return map;
   }
 }

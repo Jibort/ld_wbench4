@@ -7,21 +7,25 @@ import 'package:ld_wbench4/05_tools/ld_map.dart';
 abstract class LdModel
 implements LdTagIntf {
   // 📝 ESTÀTICS -----------------------
-  static const String mfModel = "mfData";
+  static int _ids = 0;
+  static int get newId => _ids++;
+
+  static const String mfModel = "mfModel";
+  static const String mfId    = "mdId";
 
   // 🧩 MEMBRES ------------------------
-  final String id;
+  final int id;
 
   // 🛠️ CONSTRUCTOR -------------------
-  LdModel({ required this.id });
+  LdModel({ int? pId }):id = pId?? LdModel.newId;
 
   LdModel.fromMap({ required LdMap pMap })
-  : id = pMap['id'];
+  : id = pMap[mfId];
 
   // 📥 GETTERS/SETTERS ----------------
   @override String get baseTag;
   
   // 🌥️ FUNCIONS ABSTRACTES -----------
   void dispose();
-  LdMap toMap();
+  LdMap toMap() => LdMap({mfId: id});
 }

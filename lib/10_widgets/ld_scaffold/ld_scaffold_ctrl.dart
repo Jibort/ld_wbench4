@@ -2,13 +2,12 @@
 // CreatedAt: 2025/03/23 dg. CLA[JIQ].
 
 import 'package:flutter/material.dart';
-import 'package:ld_wbench4/03_core/ld_widget.dart';
-import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
-import 'package:ld_wbench4/10_widgets/ld_app_bar/ld_appbar_widget.dart';
-import 'ld_scaffold_widget.dart';
 
-class LdScaffoldCtrl
-extends LdWidgetCtrl<LdStreamEnvelope, LdScaffoldCtrl, LdScaffoldState> {
+import 'package:ld_wbench4/03b_core/ld_widget.dart';
+import 'package:ld_wbench4/10_widgets/ld_app_bar/ld_appbar_widget.dart';
+
+class LdScaffoldCtrl<W extends LdWidget>
+extends LdWidgetCtrl<W> {
   // 🧩 MEMBRES ------------------------
   final Widget?   _body;
   final LdAppbar? _appBar;
@@ -62,4 +61,9 @@ extends LdWidgetCtrl<LdStreamEnvelope, LdScaffoldCtrl, LdScaffoldState> {
 
   // 'LdTagIntf' ----------------------
   @override String get baseTag => "LdScaffoldCtrl";
+  
+  // 'LdWidget' ----------------------
+  @override
+  void connectState() {
+  }
 }

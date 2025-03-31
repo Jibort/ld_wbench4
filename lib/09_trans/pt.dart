@@ -1,9 +1,9 @@
-import 'tr.dart';
+import 'l.dart';
 
 const Map<String, String> ptMap = {
-  Tr.sabinaApp: "Aplicativo Sabina",
-  Tr.sabinaWelcome: "Bem-vindo a Sabina.",
-  Tr.loading: "Carregando",
-  Tr.of: "de",
-  Tr.reload: "Recarregar",
+  L.sabinaApp: "Aplicativo Sabina",
+  L.sabinaWelcome: "Bem-vindo a Sabina.",
+  L.loading: "Carregando",
+  L.of: "de",
+  L.reload: "Recarregar",
 };

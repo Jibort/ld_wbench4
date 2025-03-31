@@ -1,12 +1,13 @@
 //
 // CreatedAt: 2025/03/23 dg. CLA[JIQ].
 
-import 'package:ld_wbench4/03_core/ld_widget_state.dart';
+import 'package:ld_wbench4/03b_core/ld_widget_state.dart';
+import 'package:ld_wbench4/07_models/ld_model.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 import 'package:ld_wbench4/10_widgets/ld_scaffold/ld_scaffold_widget.dart';
 
-class LdScaffoldState
-extends LdWidgetState<LdStreamEnvelope, LdScaffoldCtrl, LdScaffoldState> {
+class LdScaffoldState<E extends LdStreamEnvelope<LdModel>>
+extends LdWidgetState<LdScaffold, E> {
   // 📝 ESTÀTICS -----------------------
   static const String className = "LdScaffoldState";
 
@@ -31,10 +32,14 @@ extends LdWidgetState<LdStreamEnvelope, LdScaffoldCtrl, LdScaffoldState> {
   // 📥 GETTERS/SETTERS ----------------
   String get title => _title;
   String? get subTitle => _subTitle;
+  void setTitles({ required String pTitle, String? pSubtitle }) {
+    _title = pTitle;
+    _subTitle = pSubtitle;
+  }
 
   // 🌥️ 'LdWidgetState' -------------
   @override
-  Future<LdStreamEnvelope?> dataProcess({ String? pSrcTag, String? pTgtTag }) {
+  Future<E?> dataProcess({ String? pSrcTag, List<String>? pTgtTags }) {
     throw UnimplementedError();
   }
   

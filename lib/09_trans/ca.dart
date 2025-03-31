@@ -1,9 +1,9 @@
-import 'tr.dart';
+import 'l.dart';
 
 const Map<String, String> caMap = {
-  Tr.sabinaApp: "Aplicació Sabina",
-  Tr.sabinaWelcome: "Benvingut/da a Sabina.",
-  Tr.loading: "Carregant",
-  Tr.of: "de",
-  Tr.reload: "Recarregar",
+  L.sabinaApp: "Aplicació Sabina",
+  L.sabinaWelcome: "Benvingut/da a Sabina.",
+  L.loading: "Carregant",
+  L.of: "de",
+  L.reload: "Recarregar",
 };

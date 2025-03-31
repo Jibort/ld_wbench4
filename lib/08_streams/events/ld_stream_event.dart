@@ -26,7 +26,7 @@ extends LdStreamEnvelope {
   LdStreamEvent({
     super.pTimeStamp,
     required super.pSrcTag,
-    required super.pTgtTag,
+    required super.pTgtTags,
     required StreamEvent pState,
   }): _event = pState;
 

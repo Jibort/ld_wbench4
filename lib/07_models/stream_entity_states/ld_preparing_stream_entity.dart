@@ -14,7 +14,7 @@ extends LdStateStreamEntity {
   // 📥 GETTERS/SETTERS ----------------
   
   // 🛠️ CONSTRUCTORS ------------------
-  LdPreparingStreamEntity({ required super.pSrcTag, super.pTgtTag, bool pIsVirgin = true })
+  LdPreparingStreamEntity({ required super.pSrcTag, super.pTgtTags, bool pIsVirgin = true })
   : _isVirgin = pIsVirgin, 
     super(pState: LdEntityState.preparing);
   

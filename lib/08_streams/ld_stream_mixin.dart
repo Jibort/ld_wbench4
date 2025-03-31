@@ -17,6 +17,7 @@ import 'package:ld_wbench4/07_models/ld_model_stream_entity.dart';
 import 'package:ld_wbench4/07_models/stream_entity_states/ld_error_stream_entity.dart';
 import 'package:ld_wbench4/07_models/stream_entity_states/ld_loaded_stream_entity.dart';
 import 'package:ld_wbench4/07_models/stream_entity_states/ld_loading_stream_entity.dart';
+import 'package:ld_wbench4/07_models/stream_entity_states/ld_locale_stream_entity.dart';
 import 'package:ld_wbench4/07_models/stream_entity_states/ld_reloading_stream_entity.dart';
 import 'package:ld_wbench4/07_models/stream_entity_states/ld_theme_stream_entity.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
@@ -68,77 +69,65 @@ mixin LdStreamMixin<E extends LdStreamEnvelope> {
 
   // 🌥️ ESTATS -----------------------
   /// Emet que una estructura de dades.
-  void emitData<T extends LdModel>({ required String pSrcTag, String? pTgtTag, T? pData }) {
+  void emitData<T extends LdModel>({ required String pSrcTag, List<String>? pTgtTags, T? pData }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdModelStreamEntity<T>(pSrcTag: pSrcTag, pTgtTag: pTgtTag, pData: pData) as E);
+    _streamCtrl.add(LdModelStreamEntity<T>(pSrcTag: pSrcTag, pTgtTags: pTgtTags, pData: pData) as E);
   }
 
   /// Emet que s'està preparant la càrrega de dades
-  void emitPreparing({ required String pSrcTag, String? pTgtTag, bool pIsVirgin = true}) {
+  void emitPreparing({ required String pSrcTag, List<String>? pTgtTags, bool pIsVirgin = true}) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdPreparingViewStreamEvent(pSrcTag: pSrcTag, pTgtTag: pTgtTag, pIsVirgin: pIsVirgin) as E);
+    _streamCtrl.add(LdPreparingViewStreamEvent(pSrcTag: pSrcTag, pTgtTags: pTgtTags, pIsVirgin: pIsVirgin) as E);
   }
   
   /// Emet que s'està carregant les dades
-  void emitLoading({ required String pSrcTag, String? pTgtTag }) {
+  void emitLoading({ required String pSrcTag, List<String>? pTgtTags }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdLoadingStreamEntity(pSrcTag: pSrcTag, pTgtTag: pTgtTag) as E);
+    _streamCtrl.add(LdLoadingStreamEntity(pSrcTag: pSrcTag, pTgtTags: pTgtTags) as E);
   }
   
   /// Emet que les dades s'han carregat correctament
-  void emitLoaded<D>({ required String pSrcTag, String? pTgtTag, required D data, bool pIsVirgin = true }) {
+  void emitLoaded<D>({ required String pSrcTag, List<String>? pTgtTags, required D data, bool pIsVirgin = true }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdLoadedStreamEntity<D>(pSrcTag: pSrcTag, pTgtTag: pTgtTag, pData: data, pFirstTime: pIsVirgin) as E);
+    _streamCtrl.add(LdLoadedStreamEntity<D>(pSrcTag: pSrcTag, pTgtTags: pTgtTags, pData: data, pFirstTime: pIsVirgin) as E);
   }
 
   /// Emet que s'ha produït un error durant la càrrega
-  void emitError({ required String pSrcTag, String? pTgtTag, required String error, Exception? exception }) {
+  void emitError({ required String pSrcTag, List<String>? pTgtTags, required String error, Exception? exception }) {
     Debug.error(error, exception);
     
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
     _streamCtrl.add(LdErrorStreamEntity(
       pSrcTag: pSrcTag,
-      pTgtTag: pTgtTag,
+      pTgtTags: pTgtTags,
       pError: error,
       pException: exception
     ) as E);
   }
   
   /// Emet que s'està tornant a carregar les dades
-  void emitReloading({ required String pSrcTag, String? pTgtTag }) {
+  void emitReloading({ required String pSrcTag, List<String>? pTgtTags }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
-    _streamCtrl.add(LdReLoadingStreamEntity(pSrcTag:  pSrcTag, pTgtTag: pTgtTag) as E);
+    _streamCtrl.add(LdReLoadingStreamEntity(pSrcTag:  pSrcTag, pTgtTags: pTgtTags) as E);
   }
   
   /// Emet un canvi de tema
-  void emitThemeUpdate({ required String pSrcTag, String? pTgtTag, required ThemeData pTData }) {
+  void emitThemeUpdate({ required String pSrcTag, List<String>? pTgtTags, required ThemeData pTData }) {
     if (_streamCtrl == null || _streamCtrl.isClosed) return;
     _streamCtrl.add(LdThemeStreamEntity(
-      pSrcTag: pSrcTag,
-      pTgtTag: pTgtTag, 
-      pData:   pTData
+      pSrcTag:  pSrcTag,
+      pTgtTags: pTgtTags, 
+      pData:    pTData
     ) as E);
   }
 
-  // 🎭 HOOKS (JA NO SÓN NECESSARIS) ---
-  // /// Invocada quan es vol transmetre una estructura de dades.
-  // void onData({ String? pTag, required T pData });
-
-  // /// Invocada quan s'està preparant la càrrega
-  // void onPreparing({ String? pTag });
-  
-  // /// Invocada quan s'està carregant
-  // void onLoading({ String? pTag });
-  
-  // /// Invocada quan les dades s'han carregat
-  // void onLoaded({ String? pTag, T? pData });
-  
-  // /// Invocada quan s'ha produït un error
-  // void onError({ String? pTag, required String pError, Exception? pExc });
-  
-  // /// Invocada quan s'està recarregant
-  // void onReloading({ String? pTag });
-  
-  // /// Invocada quan es canvia el tema
-  // void onThemeUpdate({ String? pTag, ThemeData pTData });
+  /// Emet un canvi de llengua
+  void emitLocaleUpdate({ required String pSrcTag, List<String>? pTgtTags, required Locale pLocale }) {
+    if (_streamCtrl == null || _streamCtrl.isClosed) return;
+    _streamCtrl.add(LdLocaleStreamEntity(
+      pSrcTag:  pSrcTag,
+      pTgtTags: pTgtTags, 
+      pLocale:    pLocale
+    ) as E);
+  }
 }

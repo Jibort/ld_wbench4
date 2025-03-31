@@ -2,15 +2,11 @@
 // CreatedAt: 2025/03/18 dt. 
 
 import 'package:flutter/material.dart';
-import 'package:ld_wbench4/03_core/ld_ctrl.dart';
-import 'package:ld_wbench4/03_core/ld_view.dart';
-import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
+import 'package:ld_wbench4/03b_core/ld_ctrl.dart';
+import 'package:ld_wbench4/03b_core/ld_view.dart';
 
-abstract class LdViewCtrl<
-  T extends LdStreamEnvelope,
-  V extends LdView<T, dynamic>,
-  S extends LdViewState<T, dynamic, dynamic>
-> extends LdCtrl<T, V, S> {
+abstract class LdViewCtrl<V extends LdView>
+extends LdCtrl<V> {
   // 📝 ESTÀTICS -----------------------
   
   // 🧩 MEMBRES ------------------------
@@ -19,6 +15,7 @@ abstract class LdViewCtrl<
   LdViewCtrl({ super.pTag });
 
   @override
+  @mustCallSuper
   void dispose() {
     super.dispose();
   }
@@ -26,6 +23,5 @@ abstract class LdViewCtrl<
   // 📥 GETTERS/SETTERS ----------------
   
   // 🌥️ 'LdCtrl' ----------------------
-  @override
-  Widget build(BuildContext pBCtx);
+  @override Widget build(BuildContext pBCtx);
 }

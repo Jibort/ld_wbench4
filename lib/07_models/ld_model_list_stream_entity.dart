@@ -20,7 +20,7 @@ extends LdStreamEnvelope {
   LdModelsListStreamEntity({
     super.pTimeStamp,
     required super.pSrcTag, 
-    required super.pTgtTag, 
+    required super.pTgtTags, 
     required T pList,
   }): _list = pList;
   

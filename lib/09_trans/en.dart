@@ -1,9 +1,9 @@
-import 'tr.dart';
+import 'l.dart';
 
 const Map<String, String> enMap = {
-  Tr.sabinaApp: "Sabina application",
-  Tr.sabinaWelcome: "Welcome to Sabina.",
-  Tr.loading: "Loading",
-  Tr.of: "of",
-  Tr.reload: "Reload",
+  L.sabinaApp: "Sabina application",
+  L.sabinaWelcome: "Welcome to Sabina.",
+  L.loading: "Loading",
+  L.of: "of",
+  L.reload: "Reload",
 };

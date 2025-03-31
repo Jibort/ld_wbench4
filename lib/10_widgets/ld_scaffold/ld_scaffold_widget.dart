@@ -4,10 +4,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'package:ld_wbench4/03_core/ld_widget.dart';
+import 'package:ld_wbench4/03b_core/ld_widget.dart';
 import 'package:ld_wbench4/05_tools/color_extensions.dart';
 import 'package:ld_wbench4/07_models/ld_model.dart';
-import 'package:ld_wbench4/07_models/ld_stream_envelope_old.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 import 'package:ld_wbench4/10_widgets/ld_app_bar/ld_appbar_widget.dart';
 import 'package:ld_wbench4/10_widgets/ld_scaffold/ld_scaffold_ctrl.dart';
@@ -35,25 +34,26 @@ extends LdWidget {
     Widget? endDrawer,
     Widget? floatingActionButton,
     Color? backgroundColor,
-    bool resizeToAvoidBottomInset = true,
-  }) : super(
-    pState: LdScaffoldState(
-      pTag: pTag,
-      pTitle: pTitle,
-      pSubtitle: pSubtitle,    
-    ),
-    pCtrl: LdScaffoldCtrl(
-      pTag: pTag,
-      pView: pView,
-      pTitle: pTitle,
-      pSubtitle: pSubtitle,
-      pDrawer: drawer,
-      pEndDrawer: endDrawer,
-      pBtnFloatingAction: floatingActionButton,
-      pBgColor: backgroundColor,
-      pResizeToAvoidBottomInset: resizeToAvoidBottomInset,
-    ),
-  );
+    bool resizeToAvoidBottomInset = true, })
+    : _appbar = LdAppbar(pTag: pTag, pView: pView, pTitle: pTitle, pSubtitle: pSubtitle),
+      super(
+        pState: LdScaffoldState(
+          pTag: pTag,
+          pTitle: pTitle,
+          pSubtitle: pSubtitle,    
+        ),
+        pCtrl: LdScaffoldCtrl(
+          pTag: pTag,
+          pView: pView,
+          pTitle: pTitle,
+          pSubtitle: pSubtitle,
+          pDrawer: drawer,
+          pEndDrawer: endDrawer,
+          pBtnFloatingAction: floatingActionButton,
+          pBgColor: backgroundColor,
+          pResizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        ),
+      );
 
   @override
   void dispose() {
@@ -79,7 +79,10 @@ extends LdWidget {
       stream: state.stream,
       builder: (context, snapshot) {
         return Scaffold(
-          appBar: _appBar,
+          appBar: PreferredSize(
+            preferredSize: ,
+            child: _appbar,
+          ),
           drawer: _drawer,
           endDrawer: _endDrawer,
           body: _buildBody(context, snapshot),
@@ -177,4 +180,9 @@ extends LdWidget {
   // 'LdTagIntf' ----------------------
   @override
   String get baseTag => "LdScaffold";
+  
+  @override
+  State<LdWidget> createState() {
+    throw UnimplementedError();
+  }
 }

@@ -1,9 +1,9 @@
-import 'tr.dart';
+import 'l.dart';
 
 const Map<String, String> esMap = {
-  Tr.sabinaApp: "Aplicación Sabina",
-  Tr.sabinaWelcome: "Bienvenido/a a Sabina.",
-  Tr.loading: "Cargando",
-  Tr.of: "de",
-  Tr.reload: "Recargar",
+  L.sabinaApp: "Aplicación Sabina",
+  L.sabinaWelcome: "Bienvenido/a a Sabina.",
+  L.loading: "Cargando",
+  L.of: "de",
+  L.reload: "Recargar",
 };

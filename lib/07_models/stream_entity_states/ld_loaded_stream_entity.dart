@@ -22,7 +22,7 @@ extends LdStateStreamEntity {
   LdLoadedStreamEntity({
     super.pTimeStamp,
     required super.pSrcTag,
-    super.pTgtTag, 
+    super.pTgtTags, 
     required T pData,
     required bool pFirstTime, 
  })
