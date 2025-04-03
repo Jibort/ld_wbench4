@@ -6,12 +6,14 @@
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/ld_model.dart';
 
-class   TestModel 
+class   Test01Model 
 extends LdModel {
+  // 🧩 MEMBRES ------------------------
   final String name;
   final String description;
   
-  TestModel({
+  // 🛠️ CONSTRUCTOR -------------------
+  Test01Model({
     int? pId,
     required this.name,
     required this.description,
@@ -21,13 +23,16 @@ extends LdModel {
   String get baseTag => "TestModel";
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-  }
+  void dispose() { }
 
   @override
   LdMap toMap() {
-    // TODO: implement toMap
-    throw UnimplementedError();
+    LdMap map = super.toMap();
+    map.addAll({
+    LdModel.mfName: name,
+    LdModel.mfDesc: description,
+    });
+
+    return map;
   }
 }

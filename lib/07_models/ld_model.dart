@@ -1,7 +1,8 @@
 //
 // CreatedAt: 2025/03/22 ds. JIQ
 
-import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ld_wbench4/03_core/interfaces/ld_tag_intf.dart';
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 
 abstract class LdModel
@@ -12,6 +13,8 @@ implements LdTagIntf {
 
   static const String mfModel = "mfModel";
   static const String mfId    = "mdId";
+  static const String mfName  = "mfName";
+  static const String mfDesc  = "mfDesc";
 
   // 🧩 MEMBRES ------------------------
   final int id;
@@ -27,5 +30,6 @@ implements LdTagIntf {
   
   // 🌥️ FUNCIONS ABSTRACTES -----------
   void dispose();
-  LdMap toMap() => LdMap({mfId: id});
+  @mustCallSuper
+  LdMap toMap() => LdMap({ mfId: id });
 }

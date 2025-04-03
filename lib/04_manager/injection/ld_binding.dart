@@ -2,8 +2,8 @@
 // CreatedAt: 2025/03/08 dt. JIQ
 
 import 'package:intl/intl.dart';
-import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
-import 'package:ld_wbench4/03_core/ld_tag_mixin.dart';
+import 'package:ld_wbench4/03_core/interfaces/ld_tag_intf.dart';
+import 'package:ld_wbench4/03_core/mixins/ld_tag_mixin.dart';
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 
 class LdBinding<T extends LdTagMixin> {
@@ -16,6 +16,8 @@ class LdBinding<T extends LdTagMixin> {
   static String get _newState => NumberFormat('00000').format(_states++);
   static int _ctrls = 0;
   static String get _newCtrl => NumberFormat('00000').format(_ctrls++);
+  static int _services = 0;
+  static String get _newService => NumberFormat('00000').format(_services++);
 
   // 📝 SINGLETON ----------------------
   static final LdBinding _single = LdBinding._();
@@ -46,7 +48,7 @@ class LdBinding<T extends LdTagMixin> {
 
   // 📝 CREACIÓ DE TAGS ----------------
   String newViewTag(dynamic pBase) {
-    assert((pBase == null || pBase! is String || pBase! is T), "LdTagMixin.newViewTag(pBase): pBase no és nul ni cap tipus acceptat!");
+    assert((pBase == null || pBase! is String || pBase! is T), "LdTagMixin.newViewTag(pBase): pBase no és nul ni cap tipus de vista acceptat!");
     String tag;
 
     if (pBase == null) {
@@ -60,7 +62,7 @@ class LdBinding<T extends LdTagMixin> {
   }
 
   String newWidgetTag(dynamic pBase) {
-    assert((pBase! is String) && (pBase! is T));
+    assert((pBase == null || pBase! is String || pBase! is T), "LdTagMixin.newWidgetTag(pBase): pBase no és nul ni cap tipus de widget acceptat!");
     String tag;
 
     if (pBase == null) {
@@ -68,15 +70,14 @@ class LdBinding<T extends LdTagMixin> {
     } else if (pBase is String) {
       tag = "$pBase[$_newWidget]";
     } else {
-      tag = "${(pBase as LdTagIntf).baseTag}[$_newView]";
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newWidget]";
     }
 
     return tag;
   }
 
   String newStateTag(dynamic pBase) {
-    assert((pBase! is String) && (pBase! is T));
-
+    assert((pBase == null || pBase! is String || pBase! is T), "LdTagMixin.newStateTag(pBase): pBase no és nul ni cap tipus d'estat acceptat!");
     String tag;
 
     if (pBase == null) {
@@ -84,15 +85,14 @@ class LdBinding<T extends LdTagMixin> {
     } else if (pBase is String) {
       tag = "$pBase[$_newState]";
     } else {
-      tag = "${(pBase as LdTagIntf).baseTag}[$_newView]";
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newState]";
     }
 
     return tag;
   }
 
   String newCtrlTag(dynamic pBase) {
-    assert((pBase! is String) && (pBase! is T));
-
+    assert((pBase == null || pBase! is String || pBase! is T), "LdTagMixin.newCtrlTag(pBase): pBase no és nul ni cap tipus de controlador acceptat!");
     String tag;
 
     if (pBase == null) {
@@ -100,7 +100,24 @@ class LdBinding<T extends LdTagMixin> {
     } else if (pBase is String) {
       tag = "$pBase[$_newCtrl]";
     } else {
-      tag = "${(pBase as LdTagIntf).baseTag}[$_newView]";
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newCtrl]";
+    }
+
+    return tag;
+  }
+
+  String newServiceTag(dynamic pBase) {
+        assert((pBase == null || pBase! is String || pBase! is T), "LdTagMixin.newServiceTag(pBase): pBase no és nul ni cap tipus de servei acceptat!");
+
+
+    String tag;
+
+    if (pBase == null) {
+      tag = "LdService[$_newService]";
+    } else if (pBase is String) {
+      tag = "$pBase[$_newService]";
+    } else {
+      tag = "${(pBase as LdTagIntf).baseTag}[$_newService]";
     }
 
     return tag;

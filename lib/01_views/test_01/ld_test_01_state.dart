@@ -1,31 +1,43 @@
 // Estat de la vista de proves 'Test_01'.
 // CreatedAt: 2025/03/19 dc. JIQ
 
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-import 'package:ld_wbench4/01_views/test_01/test_model.dart';
-import 'package:ld_wbench4/03_core/ld_state.dart';
-import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ld_wbench4/01_views/test_01/ld_test_01.dart';
 import 'package:ld_wbench4/03_core/ld_view_state.dart';
-import 'package:ld_wbench4/05_tools/ld_map.dart';
-import 'package:ld_wbench4/07_models/client_model/ld_user_model.dart';
-import 'package:ld_wbench4/07_models/ld_model_stream_entity.dart';
-import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
+import 'package:ld_wbench4/09_trans/l.dart';
 
-class LdTest01State extends LdState<TestModel> {
-  List<TestModel>? items;
+class LdTest01State<
+  FW extends StatefulWidget,
+  V  extends LdTest01<FW, V, VS, VC, W, WS, WC, M>, 
+  VS extends LdTest01State<FW, V, VS, VC, W, WS, WC, M>,
+  VC extends LdTest01Ctrl<FW, V, VS, VC, W, WS, WC, M>,
+  W  extends LdTest01<FW, V, VS, VC, W, WS, WC, M>, 
+  WS extends LdTest01State<FW, V, VS, VC, W, WS, WC, M>,
+  WC extends LdTest01Ctrl<FW, V, VS, VC, W, WS, WC, M>,
+  M  extends Test01Model
+>
+extends LdViewState<FW, V, VS, VC, W, WS, WC, M> {
+  // 🧩 MEMBRES ------------------------
+  List<Test01Model>? items;
   
-  @override
-  String? get title => 'Vista de Proves';
-  
-  @override
+  // 🛠️ CONSTRUCTOR -------------------
+  LdTest01State({
+    required String pTitle,
+    String? pSubTitle,
+  })
+  : super(pTag: "LdTest01State") {
+    ctrl = LdTest01Ctrl(pState: this);
+  }
+
+  // 📥 GETTERS/SETTERS ----------------
+  String? get title => L.test01Title.tx;
   String? get subtitle => isLoading 
-      ? 'Carregant dades...' 
+      ? L.test01SubTitle.tx 
       : (items != null ? '${items!.length} elements' : null);
 
+  // 🌥️ 'LdState' ---------------------
   @override
-  Future<TestModel?> dataProcess({String? pSrcTag, List<String>? pTgtTags}) async {
+  Future<Test01Model?> dataProcess({String? pSrcTag, List<String>? pTgtTags}) async {
     // Simulem una càrrega de dades
     final totalItems = 10;
     items = [];
@@ -38,7 +50,7 @@ class LdTest01State extends LdState<TestModel> {
       await Future.delayed(Duration(milliseconds: 300));
       
       // Afegim un element
-      items!.add(TestModel(
+      items!.add(Test01Model(
         pId: i,
         name: 'Element $i',
         description: 'Descripció detallada de l\'element $i'
@@ -53,9 +65,13 @@ class LdTest01State extends LdState<TestModel> {
     // Actualitzar estadístiques finals
     updateStats(totalItems, totalItems, 1.0);
     
-    return TestModel(
+    return Test01Model(
       name: 'Model Principal',
       description: 'Model carregat correctament'
     );
   }
+  
+  // 🌥️ 'LdTagIntf' -------------------
+  @override
+  String get baseTag => "LdTest01State";
 }

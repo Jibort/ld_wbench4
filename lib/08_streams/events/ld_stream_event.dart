@@ -5,7 +5,7 @@
 
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
-import 'package:ld_wbench4/08_streams/stream_event.dart';
+import 'package:ld_wbench4/03_core/enums/state_event_enum.dart';
 
 // 🧩 Tipus de serialització i nom de camps.
 const String mapState     = "mapState";
@@ -16,18 +16,18 @@ const String mapData      = "mapData";
 abstract class LdStreamEvent 
 extends LdStreamEnvelope {
   // 🧩 MEMBRES ------------------------
-  late StreamEvent _event;
+  late StateEvent _event;
 
   // 📥 GETTERS/SETTERS ----------------
-  StreamEvent get event => _event;
-  set event(StreamEvent pEvent) => _event = pEvent;
+  StateEvent get event => _event;
+  set event(StateEvent pEvent) => _event = pEvent;
 
   // 🛠️ CONSTRUCTORS ------------------
   LdStreamEvent({
     super.pTimeStamp,
     required super.pSrcTag,
     required super.pTgtTags,
-    required StreamEvent pState,
+    required StateEvent pState,
   }): _event = pState;
 
   LdStreamEvent.fromMap({ required LdMap pMap })

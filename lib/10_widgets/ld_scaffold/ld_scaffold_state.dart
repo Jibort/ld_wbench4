@@ -1,7 +1,7 @@
 //
 // CreatedAt: 2025/03/23 dg. CLA[JIQ].
 
-import 'package:ld_wbench4/03b_core/ld_widget_state.dart';
+import 'package:ld_wbench4/03b_core/ld_widget_state_b.dart';
 import 'package:ld_wbench4/07_models/ld_model.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 import 'package:ld_wbench4/10_widgets/ld_scaffold/ld_scaffold_widget.dart';

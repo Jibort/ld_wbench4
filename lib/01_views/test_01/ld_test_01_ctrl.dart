@@ -6,71 +6,98 @@
 import 'package:flutter/material.dart';
 import 'package:ld_wbench4/01_views/test_01/ld_test_01.dart';
 import 'package:ld_wbench4/01_views/test_01/ld_test_01_state.dart';
+import 'package:ld_wbench4/01_views/test_01/test_01_model.dart';
 import 'package:ld_wbench4/02_theme/ld_theme.dart';
-import 'package:ld_wbench4/03b_core/ld_ctrl.dart';
-import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
-import 'package:ld_wbench4/03b_core/ld_view.dart';
+import 'package:ld_wbench4/03_core/ld_ctrl.dart';
+import 'package:ld_wbench4/03_core/interfaces/ld_tag_intf.dart';
+import 'package:ld_wbench4/03_core/ld_view.dart';
+import 'package:ld_wbench4/03_core/ld_view_crtl.dart';
+import 'package:ld_wbench4/03_core/ld_widget.dart';
+import 'package:ld_wbench4/03_core/ld_widget_crtl.dart';
+import 'package:ld_wbench4/03_core/ld_widget_state.dart';
+import 'package:ld_wbench4/07_models/ld_model.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_envelope.dart';
 import 'package:ld_wbench4/09_trans/l.dart';
+import 'package:ld_wbench4/10_widgets/ld_scaffold/ld_scaffold_widget.dart';
 
-class LdTest01Ctrl 
-extends LdCtrl<LdTest01> {
-  
-  final LdTest01State state;
-  
-  LdTest01Ctrl(this.state) {
-    state.ctrl = this;
-  }
-  
-  Future<void> loadData() async => await state.loadData();
-  void toggleTheme()            => LdTheme.single.toggleTheme();
-  void changeLanguage(String langCode) 
-    => L.tr.changeLanguage(pSrcTag: state.tag, pLangCode: langCode);
-  
+class   LdTest01Ctrl<
+  FW extends StatefulWidget,
+  V  extends LdTest01<FW, V, VS, VC, W, WS, WC, M>, 
+  VS extends LdTest01State<FW, V, VS, VC, W, WS, WC, M>,
+  VC extends LdTest01Ctrl<FW, V, VS, VC, W, WS, WC, M>,
+  W  extends LdWidget<FW, V, VS, VC, W, WS, WC, M>, 
+  WS extends LdWidgetState<FW, V, VS, VC, W, WS, WC, M>,
+  WC extends LdWidgetCtrl<FW, V, VS, VC, W, WS, WC, M>,
+  M  extends LdModel
+>
+extends LdViewCtrl<LdTest01, LdTest01State, LdTest01Ctrl, LdTest01, Test01Model> {
+  // 🧩 MEMBRES ------------------------
+  List<Test01Model>? _items;
+
+  // 🛠️ CONSTRUCTOR -------------------
+  LdTest01Ctrl({ required super.pState });
+
+  // 🌥️ FUNCIONALITAT -----------------
+  void toggleTheme() => LdTheme.single.toggleTheme();
+  void changeLanguage(String langCode) =>
+      L.tr.changeLanguage(pSrcTag: state.tag, pLangCode: langCode);
+
+  // 🌥️ 'LdTagIntf' -------------------
   @override
   String get baseTag => "LdTest01Ctrl";
-  
+
+  @override
+  void connectState() {}
+
+  // 🌥️ 'LdCtrl' ----------------------
   @override
   Widget build(BuildContext pBCtx) {
-    throw UnimplementedError();
+    return LdScaffold(
+      pTag: "${baseTag}_Scaffold",
+      pView: state.view,
+    );
+
+    //   appBar: LdAppBar(
+    //     ctrl: LdAppBarCtrl(
+    //       pTag: 'test_appbar',
+    //       pView: context as LdAppBar,
+    //       viewState: _state,
+    //       showProgress: true,
+    //       pActions: [
+    //         IconButton(
+    //           icon: Icon(Icons.language),
+    //           onPressed: () => _showLanguageMenu(context),
+    //         ),
+    //         IconButton(
+    //           icon: Icon(Icons.brightness_4),
+    //           onPressed: _ctrl.toggleTheme,
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    //   body: _buildBody(),
+    // );
   }
-  
-  @override
-  void connectState() {
-  }
-}
 
-
-
-class _LdTest01State extends State<LdTest01> with LdEventListenerMixin {
-  late LdTest01State _state;
-  late LdTest01Ctrl _ctrl;
-  
-  // Estat de la UI
-  bool _isLoading = false;
-  bool _isError = false;
-  String? _errorMessage;
-  List<TestModel>? _items;
-  
   @override
   void initState() {
     super.initState();
-    
+
     // Crear estat i controlador
     _state = LdTest01State();
     _ctrl = LdTest01Ctrl(_state);
-    
+
     // Escoltar events de l'estat d'aquesta vista
-    listenToEventsFrom(_state.tag, _handleStateEvents);
-    
+    listenToEventsFrom(state.tag, _handleStateEvents);
+
     // Iniciar càrrega de dades
-    _ctrl.loadData();
+    loadData();
   }
-  
+
   void _handleStateEvents(LdEvent event) {
     if (event is LdStateChangedEvent) {
       final state = event.state;
-      
+
       setState(() {
         _isLoading = _state.isLoading;
         _isError = _state.isError;
@@ -79,41 +106,16 @@ class _LdTest01State extends State<LdTest01> with LdEventListenerMixin {
       });
     }
   }
-  
+
   @override
   void dispose() {
-    cancelSubscription();
-    _state.dispose();
+    state.cancelSubscription();
+    state.dispose();
     super.dispose();
   }
-  
-  @override
-  Widget build(BuildContext context) {
-    return LdScaffold(
-      appBar: LdAppBar(
-        ctrl: LdAppBarCtrl(
-          pTag: 'test_appbar',
-          pView: context as LdAppBar,
-          viewState: _state,
-          showProgress: true,
-          pActions: [
-            IconButton(
-              icon: Icon(Icons.language),
-              onPressed: () => _showLanguageMenu(context),
-            ),
-            IconButton(
-              icon: Icon(Icons.brightness_4),
-              onPressed: _ctrl.toggleTheme,
-            ),
-          ],
-        ),
-      ),
-      body: _buildBody(),
-    );
-  }
-  
+
   Widget _buildBody() {
-    if (_isLoading) {
+    if (state.isLoading) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -125,7 +127,7 @@ class _LdTest01State extends State<LdTest01> with LdEventListenerMixin {
         ),
       );
     }
-    
+
     if (_isError) {
       return Center(
         child: Column(
@@ -135,15 +137,12 @@ class _LdTest01State extends State<LdTest01> with LdEventListenerMixin {
             SizedBox(height: 16),
             Text(_errorMessage ?? 'Error desconegut'),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _ctrl.loadData,
-              child: Text(L.reload.tx),
-            ),
+            ElevatedButton(onPressed: _ctrl.loadData, child: Text(L.reload.tx)),
           ],
         ),
       );
     }
-    
+
     return ListView.builder(
       itemCount: _items?.length ?? 0,
       itemBuilder: (context, index) {
@@ -157,78 +156,52 @@ class _LdTest01State extends State<LdTest01> with LdEventListenerMixin {
       },
     );
   }
-  
+
   void _showLanguageMenu(BuildContext context) {
     showMenu(
       context: context,
       position: RelativeRect.fromLTRB(100, 100, 0, 0),
       items: [
-        PopupMenuItem(
-          child: Text('Català'),
-          onTap: () => _ctrl.changeLanguage('ca'),
-        ),
+        PopupMenuItem(child: Text('Català'), onTap: () => changeLanguage('ca')),
         PopupMenuItem(
           child: Text('English'),
-          onTap: () => _ctrl.changeLanguage('en'),
+          onTap: () => changeLanguage('en'),
         ),
         PopupMenuItem(
           child: Text('Español'),
-          onTap: () => _ctrl.changeLanguage('es'),
+          onTap: () => changeLanguage('es'),
         ),
         PopupMenuItem(
           child: Text('Français'),
-          onTap: () => _ctrl.changeLanguage('fr'),
+          onTap: () => changeLanguage('fr'),
         ),
         PopupMenuItem(
           child: Text('Português'),
-          onTap: () => _ctrl.changeLanguage('pt'),
+          onTap: () => changeLanguage('pt'),
         ),
       ],
     );
   }
-  
-  void _showItemDetails(BuildContext context, TestModel item) {
+
+  void _showItemDetails(BuildContext context, Test01Model item) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(item.name),
-        content: Text(item.description),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('Tancar'),
+      builder:
+          (context) => AlertDialog(
+            title: Text(item.name),
+            content: Text(item.description),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Tancar'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
+  
+  @override
+  void setupEventListeners() {
+    // TODO: implement setupEventListeners
+  }
 }
-
-// class LdTest01Ctrl<T extends LdStreamEnvelope, V extends LdTest01>
-// extends LdViewCtrl<V>
-// implements LdTagIntf {
-//   // 📝 ESTÀTICS -----------------------
-  
-//   // 🛠️ CONSTRUCTOR/DISPOSE -----------
-//   LdTest01Ctrl(String? pTag): super(pTag: pTag);
-
-//   @override  
-//   void dispose() {
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext pBCtx) {
-//     return Container();
-//   }
-  
-//   // 🌥️ 'LdTagIntf' -------------------
-//   @override
-//   String get baseTag => "LdTest01Ctrl";
-  
-//   // 🌥️ 'LdCtrl' ----------------------
-//   @override
-//   void connectState() {
-    
-//   }
-// }

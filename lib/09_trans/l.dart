@@ -3,7 +3,7 @@
 
 import 'dart:ui';
 
-import 'package:ld_wbench4/03_core/ld_event_emitter_mixin.dart';
+import 'package:ld_wbench4/03_core/mixins/ld_event_emitter_mixin.dart';
 import 'package:ld_wbench4/08_streams/ld_stream_mixin.dart';
 
 import 'ca.dart';
@@ -16,10 +16,18 @@ const Locale _defLocale = Locale('es');
 
 class L 
 with  LdEventEmitterMixin {
-  // Singleton
+  // 📝 ESTÀTICS -----------------------
   static final tr = L();
-  
-  // Dades
+  // Claus constants
+  static const String sabinaApp      = "sabinaApp";
+  static const String sabinaWelcome  = "sabinaWelcome";
+  static const String loading        = "loading";
+  static const String reload         = "reload";
+  static const String of             = "of";
+  static const String test01Title    = "test01Title";
+  static const String test01SubTitle = "test01SubTitle";
+
+  // 🧩 MEMBRES ------------------------
   static const Map<String, Map<String, String>> _keys = {
     'ca': caMap,
     'en': enMap,
@@ -30,17 +38,12 @@ with  LdEventEmitterMixin {
   
   static Locale _locale = _defLocale;
   static Map<String, String> _current = _keys[_defLocale.languageCode]!;
-  
-  // Getter per traduir
+
+  // 📥 GETTERS/SETTERS ----------------
+  /// Getter per traduir
   static String tx(String pKey) => _current[pKey] ?? "!?";
   
-  // Claus constants
-  static const String sabinaApp = "sabinaApp";
-  static const String sabinaWelcome = "sabinaWelcome";
-  static const String loading = "loading";
-  static const String reload = "reload";
-  static const String of = "of";
-
+  
   // Canviar l'idioma
   void changeLanguage({required String pSrcTag, required String? pLangCode}) {
     String old = _locale.languageCode;

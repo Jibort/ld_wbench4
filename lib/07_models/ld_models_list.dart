@@ -2,7 +2,7 @@
 // CreatedAt: 2025/03/22 ds. JIQ
 
 import 'package:flutter/material.dart';
-import 'package:ld_wbench4/03_core/ld_tag_interface.dart';
+import 'package:ld_wbench4/03_core/interfaces/ld_tag_intf.dart';
 import 'package:ld_wbench4/05_tools/ld_map.dart';
 import 'package:ld_wbench4/07_models/ld_model.dart';
 

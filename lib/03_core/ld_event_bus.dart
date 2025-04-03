@@ -6,19 +6,19 @@
 
 import 'dart:async';
 
-import 'package:ld_wbench4/03_core/ld_event.dart';
+import 'package:ld_wbench4/03_core/events/ld_event.dart';
 
 class LdEventBus {
   // Singleton
-  static final LdEventBus _single = LdEventBus._internal();
-  factory LdEventBus() => _single;
-  LdEventBus._internal();
-
+  static final LdEventBus _single = LdEventBus._();
   static LdEventBus get single => _single;
+
+  factory LdEventBus() => _single;
+  LdEventBus._();
 
   // Un únic StreamController per a tota l'aplicació
   final StreamController<LdEvent> _eventController = 
-      StreamController<LdEvent>.broadcast();
+    StreamController<LdEvent>.broadcast();
 
   // Stream públic
   Stream<LdEvent> get stream => _eventController.stream;

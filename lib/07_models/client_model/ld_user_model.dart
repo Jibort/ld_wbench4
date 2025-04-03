@@ -45,14 +45,16 @@ extends LdModel {
   
   // 🌥️ FUNCIONS ABSTRACTES -----------
   @override
-  LdMap toMap() 
-    => LdMap({
-      mfId:       id,
+  LdMap toMap() {
+    LdMap map = super.toMap();
+
+    map.addAll({
       mfName:     name,
       mfEmail:    email,
       mfImageUrl: imageUrl,
-    }
-  );
+    });
+    return map;
+  }
   
   // 🌥️ 'LdTagIntf' -------------------
   @override
@@ -73,9 +75,13 @@ extends LdModel {
   }
   
   @override
-  LdMap toMap() => LdMap({
-    UserModel.mfUsers: users,
-  });
+  LdMap toMap() {
+    LdMap map = super.toMap();
+    map.addAll({
+      UserModel.mfUsers: users,
+    });
+    return map;
+  }
 
   // 🌥️ 'LdTagIntf' -------------------
   @override

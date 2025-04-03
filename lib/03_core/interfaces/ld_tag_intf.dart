@@ -5,7 +5,7 @@
 // CreatedAt: 2025/03/26 dc. JIQ
 
 abstract class LdTagIntf {
-  /// Retorna el nom base de la classe per a utilitzar com a prefix de tag quan 
-  /// aquest no s'especifica a partir dels constructors.
+  // 🌥️ FUNCIONS ABSTRACTES -----------
+  /// Retorna el nom base de la classe.
   String get baseTag;
 }
